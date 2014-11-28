@@ -108,6 +108,10 @@ application "docker-registry" do
   symlinks "config.yml" => "config/config.yml"
 
   before_migrate do
+    execute "#{new_resource.virtualenv}/bin/pip install ." do
+      cwd new_resource.release_path
+    end
+
     template "#{new_resource.path}/shared/config.yml" do
       source "config.yml.erb"
       mode 0440
@@ -129,7 +133,6 @@ application "docker-registry" do
   gunicorn do
     only_if { node['docker-registry']['application_server'] }
 
-    requirements "."
     max_requests node['docker-registry']['max_requests']
     timeout node['docker-registry']['timeout']
     port node['docker-registry']['internal_port']
