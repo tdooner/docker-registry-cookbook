@@ -140,7 +140,10 @@ application "docker-registry" do
     worker_class "gevent"
     app_module "docker_registry.wsgi:application"
     virtualenv ::File.join(node['docker-registry']['install_dir'], "env", node['docker-registry']['revision'])
-    environment :SETTINGS_FLAVOR => node['docker-registry']['flavor']
+    environment(
+      'SETTINGS_FLAVOR' => node['docker-registry']['flavor'],
+      'DOCKER_REGISTRY_CONFIG' => "#{new_resource.path}/shared/config.yml",
+    )
   end
 
   nginx_load_balancer do
