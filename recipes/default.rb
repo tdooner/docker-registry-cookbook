@@ -142,7 +142,7 @@ application "docker-registry" do
     virtualenv ::File.join(node['docker-registry']['install_dir'], "env", node['docker-registry']['revision'])
     environment(
       'SETTINGS_FLAVOR' => node['docker-registry']['flavor'],
-      'DOCKER_REGISTRY_CONFIG' => "#{new_resource.path}/shared/config.yml",
+      'DOCKER_REGISTRY_CONFIG' => "/opt/docker-registry/shared/config.yml",
     )
   end
 
