@@ -108,7 +108,7 @@ application "docker-registry" do
   symlinks "config.yml" => "config/config.yml"
 
   before_migrate do
-    execute "#{new_resource.virtualenv}/bin/pip install ." do
+    execute "#{::File.join(node['docker-registry']['install_dir'], "env", node['docker-registry']['revision'])}/bin/pip install ." do
       cwd new_resource.release_path
     end
 
