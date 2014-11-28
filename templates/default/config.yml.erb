@@ -1,6 +1,4 @@
-# The `common' part is automatically included (and possibly overriden by all
-# other flavors)
-common:
+common: &common
     storage: <%= @storage %>
     storage_path: <%= @storage_path %>
     secret_key: <%= @secret_key %>
@@ -18,7 +16,9 @@ common:
 
 # This is the default configuration when no flavor is specified
 dev:
+    <<: *common
     loglevel: debug
 
 prod:
+    <<: *common
     loglevel: warn

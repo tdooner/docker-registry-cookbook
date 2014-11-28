@@ -129,20 +129,20 @@ application "docker-registry" do
   gunicorn do
     only_if { node['docker-registry']['application_server'] }
 
-    requirements "requirements.txt"
+    requirements "."
     max_requests node['docker-registry']['max_requests']
     timeout node['docker-registry']['timeout']
     port node['docker-registry']['internal_port']
     workers node['docker-registry']['workers']
     worker_class "gevent"
-    app_module "wsgi:application"
+    app_module "docker_registry.wsgi:application"
     virtualenv ::File.join(node['docker-registry']['install_dir'], "env", node['docker-registry']['revision'])
     environment :SETTINGS_FLAVOR => node['docker-registry']['flavor']
   end
 
   nginx_load_balancer do
     only_if { node['docker-registry']['load_balancer'] }
-    
+
     application_port node['docker-registry']['internal_port']
     application_server_role node['docker-registry']['application_server_role']
     server_name (node['docker-registry']['server_name'] || node['fqdn'] || node['hostname'])
